@@ -1,10 +1,10 @@
-<img width="407" height="109" alt="image" src="https://github.com/user-attachments/assets/411b1660-c5e3-4efa-8480-124dea0af371" /><img width="403" height="133" alt="image" src="https://github.com/user-attachments/assets/f8507221-71d4-4527-a7a0-76cf4feb1ecc" /><img width="880" height="168" alt="Screenshot 2026-05-12 at 10 17 59 pm" src="https://github.com/user-attachments/assets/7b0d7d50-4b6f-45cb-b71f-5a919732759c" /># R-studio
+# R-studio
 
-<Likert scale>
+## <Likert scale>
 
-#package install
+# package install
 
-library(psych) 
+>> library(psych) 
 
 # read data
 
