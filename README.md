@@ -653,6 +653,7 @@ Therefore, the unique factors at Time 1 and Time 2 cannot be considered independ
 
 <img width="321" height="80" alt="image" src="https://github.com/user-attachments/assets/efd5e048-7e9f-4429-88aa-11d3c3a02a1d" />
 
+
 <img width="452" height="136" alt="image" src="https://github.com/user-attachments/assets/c10cc088-9827-4047-82ee-e5cba6ee0487" />
 
 
