@@ -660,4 +660,181 @@ Therefore, the unique factors at Time 1 and Time 2 cannot be considered independ
 
 # <Fitting measurement models to multiple groups>
 
+## Creating project and examining data
+
+### reading data
+
+>> library(lavaan)
+
+>> library(psych)
+
+### Data import
+
+>> data(HolzingerSwineford1939)
+
+: A new object HolzingerSwineford1939 should appear in your Environment tab
+
+### sampling out the target population
+
+>> sample <- HolzingerSwineford1939[HolzingerSwineford1939$school=="Grant-White", ]
+
+: a new object called sample with only children from school Grant-White included
+
+### give value labels for sex variable
+                    
+<img width="487" height="87" alt="image" src="https://github.com/user-attachments/assets/dc35fa24-64dc-4e4d-af4a-8a309e088461" />
+
+### Descriptives by sex: Descriptive statistics by group
+
+>> describeBy(sample, group="sex")
+
+
+Ex QUESTION 1. Examine the means of the six test variables for boys and girls. Note the mean differences for x3 (spatial orientation), and all verbal tests (x4-x6). Who scores higher on what tests?
+
+<img width="1274" height="1078" alt="Screenshot 2026-05-16 at 1 54 18 pm" src="https://github.com/user-attachments/assets/c79c02a2-1b49-4ce8-ad2c-4d56f150f44d" />
+
+A: Boys scored higher than girls on x3, but girls scored higher than boys on all verbal tests (x4, x5 and x6).
+
+
+# Fitting a baseline measurement model to two subgroups (boys and girls)
+
+## Describe the measurement (confirmatory factor analysis, or CFA) model
+
+<img width="487" height="68" alt="image" src="https://github.com/user-attachments/assets/6d42b706-76bd-4966-8e46-f87ef87f4e0c" />
+
+# Fitting Baseline (Configural) model
+
+>> fit.b <- cfa(HS.model, data = sample, group = "sex")
+>> summary(fit.b, fit.measures=TRUE): chi-square, df, p-value, CFI, RMSEA,SRMR
+
+
+## QUESTION 2. How many sample moments are there in the data? Why? {Hint. When counting sample moments, do not forget that we split the data into 2 groups, so observed means, variances and covariances are available for both groups}.
+
+A: There are 6 observed variables, therefore 6 means, plus 6(6+1)/2=21 variances and covariances; 27 moments in total for each group. So we have 27*2=54 sample moments in both groups.
+
+## QUESTION 3. How many parameters does the baseline (configural) model estimate? What are they? {Hint. You can look up the total number of parameters in the output, but try to work out how these are made up. The output will help you, if you look in ‘Parameter Estimates’. Remember that values printed there are parameters.}
+
+A: Baseline model estimates 38 parameters in total. Boys and girls groups estimate the same parameters (i.e. there are 19 parameters in each group)
+
+<img width="452" height="105" alt="image" src="https://github.com/user-attachments/assets/d06fbba5-0ed2-4198-a92e-9d2e74d0b682" />
+
+## QUESTION 4. Interpret the chi-square, and SRMR. Do we retain or reject the baseline model?
+
+A: Chi-square for the baseline model is insignificant (chisq = 16.710; Degrees of freedom = 16; p = .405). The SRMR is 0.040 – nice and small.
+
+# Fitting a full measurement invariance model to subgroups
+
+# Fitting the Measurement Invariance model
+
+<img width="487" height="105" alt="image" src="https://github.com/user-attachments/assets/495607a3-a901-4daf-9092-0644b1b27527" />
+
+-> What you have just done is fit a full measurement invariance model. The model tests the following combined hypothesis:
+
+H1. The measure is fully invariant across groups. Factor loadings, intercepts and error variances for corresponding indicators are equal.
+
+## QUESTION 5. Interpret the chi-square and SRMR. Do we retain or reject the full measurement invariance model?
+
+A: Chi-square for the measurement invariance model is again insignificant (chisq = 27.482, Degrees of freedom = 30, P-value = 0.598). The SRMR is 0.058 – small again. The almost equal chi-square values for both groups (boy chisq = 13.693, girl chisq = 13.789) indicate that the measurement invariance model is equally appropriate for boys and girls.
+
+<img width="452" height="333" alt="image" src="https://github.com/user-attachments/assets/bd8429a0-3e2d-42ce-b83e-c8a7b5476c11" />
+<img width="452" height="203" alt="image" src="https://github.com/user-attachments/assets/b9fc71fc-b0a6-47a2-bb7b-f7a4ba8ef409" />
+
+
+## QUESTION 6. How many parameters does the measurement invariance model estimate? What are they? {Hint. Again, look up the total number of parameters in the output, and then try to work out how these are made up. The ‘Parameter Estimates’ output and the above explanation will help you.}
+
+A: The output says that ‘Number of free parameters’ is 40, and ‘Number of equality constraints’ is 16. This means that 40-16=24 unique parameters are estimated
+
+<img width="413" height="126" alt="image" src="https://github.com/user-attachments/assets/135f8f62-1ccf-4545-8619-b315c63972d9" />
+
+
+# Testing Equality of means of latent factors : All you need to do is to add one more group equality constraint, for latent variable "means"
+
+<img width="487" height="83" alt="image" src="https://github.com/user-attachments/assets/7a1ae17a-91d2-471d-8d36-811eb7e2562e" />
+
+## EX Q: Now fit the HS.model separately to boys and girls of Pasteur school, imposing equality constraints on the factor loadings only (i.e. fit a Metric invariance model). What is the chi-square statistic for the boy subgroup? 
+
+A: The correct answer is: 18.081
+
+<img width="1260" height="352" alt="Screenshot 2026-05-16 at 2 23 27 pm" src="https://github.com/user-attachments/assets/78b28a8b-84e0-4041-a8d8-798394c8843c" />
+
+### Note. Because the two models are nested (one is a special case of the other), you can conduct the chi-square difference test using the R base function anova(), which will compute the difference of the models’ chi-square statistics and the difference of their degrees of freedom, and print out the resulting p-value.
+
+>> anova(fit.mi, fit.mi.e)
+
+## QUESTION 8. Conduct the chi-square difference test of models with and without the equality constraints as described above, and interpret the results. Are the models significantly different? Which model will you retain?
+
+The model with additional constraints (fit.mi.e) has the Chi-square = 35.786; Degrees of freedom = 32. Testing the difference between this model and the previous model (fit.mi), we obtain Diff(Chi-square) = 35.786–27.482= 8.304 and Diff(DF) = 32–30 = 2.
+
+=> Chi-square of 8.304 on 2 degrees of freedom is significant at the 0.05 level, with the p-value=0.016. Restricting the model with additional equality constraints resulted in a significantly different (worse) fit. The fit is worse is because the chi-square is greater (and constraining some free parameters cannot make the fit better!). We conclude that the means for boys and girls on the Spatial and Verbal tests are significantly different, and that our measurement invariance model with free means is better than the model with means constrained to be equal.
+
+
+ * Note. How the fit can be ‘significantly worse’ if it is still very good, according to the chi-square test (the SRMR, not being a ‘significance’ measure but an ‘effect size’ measure, picked up the worsening fit). Here, the small sample works against us – there is not enough power to reject the ‘wrong’ model (it has too many parameters), but just enough power to detect the elements of the model that make a difference.
+
+<img width="452" height="114" alt="image" src="https://github.com/user-attachments/assets/51c3c1b5-c513-41d1-855d-a4dcfca3eed7" />
+
+
+# <Logistic regression – application to DIF analysis>
+
+
+## Data set - preliminary examination
+
+EPQ <- read.delim(file="EPQ_N_demo.txt", header=TRUE)
+
+## Screening EPQ Neuroticism items for gender DIF
+
+## Creating the trait (matching) variable, and the grouping variable
+
+### Compute the Neuroticism trait score (call it Nscore), and append it to the dataset as a new variable
+
+>> PQ$Nscore <- rowMeans(EPQ[ ,4:26], na.rm=TRUE)*23
+
+* item responses are located in columns 4 to 26
+
+
+## The variable sex is coded as 0 = female; 1 = male. ATTENTION: this means that “male” is the focal group
+
+
+<img width="487" height="87" alt="image" src="https://github.com/user-attachments/assets/f705ccda-adaf-438d-9d95-64597dc5733f" />
+
+>> library(psych)
+
+### Descriptive statistics by group
+
+>> describeBy(EPQ, group="sex")
+
+## EX Q: Who has the higher proportion of endorsing item N_19 – males or females? (Hint. Remember that for binary items coded 0/1, the item mean is also the proportion of endorsement.) Who score higher on the Neuroticism scale (Nscore) on average – males or females? (Interpret the means for N_19 in the light of the Nscore means)
+
+<img width="1308" height="1174" alt="Screenshot 2026-05-16 at 2 30 57 pm" src="https://github.com/user-attachments/assets/f4056c87-f683-48cb-ba58-dc9da4d414f2" />
+
+
+# Specifying logistic regression models
+
+## Baseline model 
+
+>> Baseline <- glm(N_19 ~ Nscore, data = EPQ, family = binomial(link="logit"))
+
+## Uniform DIF model 
+
+>> dif.U <- glm(N_19 ~ Nscore + sex, data = EPQ, family = binomial(link="logit"))
+
+## Non-Uniform DIF model
+
+>> dif.NU <- glm(N_19 ~ Nscore + sex + Nscore:sex, data = EPQ, family = binomial(link="logit"))
+
+## Testing for the significance of uniform and non-uniform effects of sex
+
+>> anova(dif.NU, test= "Chisq")
+
+<img width="914" height="1152" alt="Screenshot 2026-05-16 at 2 32 59 pm" src="https://github.com/user-attachments/assets/f31e8a07-32b0-48ee-b76b-a4c35a0f2f00" />
+
+
+## EXQ: Does sex add significantly over and above Nscore? What is the chi-square increment compared to the baseline model? 
+
+Note. The first, baseline model, will include the total Nscore as the only predictor of N_80. The second, uniform DIF model, will include the total Nscore and participants' sex as predictors. [We will NOT test for non-uniform DIF]. 
+
+<img width="1284" height="610" alt="Screenshot 2026-05-16 at 2 34 40 pm" src="https://github.com/user-attachments/assets/4f04b770-5412-4a48-b96b-9283c63dd69f" />
+
+
+#Evaluating effect sizes for uniform and non-uniform effects of sex - use package "fmsb"
+
 
