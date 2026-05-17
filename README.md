@@ -1,4 +1,4 @@
-# R-studio
+<img width="736" height="1232" alt="Screenshot 2026-05-17 at 6 55 22 pm" src="https://github.com/user-attachments/assets/df9067a3-d678-471c-9a49-2ac0ce12651e" /># R-studio
 
 ## <Likert scale>
 
@@ -835,7 +835,7 @@ Note. The first, baseline model, will include the total Nscore as the only predi
 <img width="1284" height="610" alt="Screenshot 2026-05-16 at 2 34 40 pm" src="https://github.com/user-attachments/assets/4f04b770-5412-4a48-b96b-9283c63dd69f" />
 
 
-# Evaluating effect sizes for uniform and non-uniform effects of sex - use package "fmsb"
+## Evaluating effect sizes for uniform and non-uniform effects of sex - use package "fmsb"
 
 >> NagelkerkeR2(Baseline)
 
@@ -846,19 +846,19 @@ Note. The first, baseline model, will include the total Nscore as the only predi
 >> Baseline: Nagelkerke R2 = 0.4888; dif.U: Nagelkerke R2 = 0.5237; dif.NU: Nagelkerke R2 = 0.5244
 
 
-# compare model dif.U against Baseline - Uniform DIF effect size
+### compare model dif.U against Baseline - Uniform DIF effect size
 
 >> NagelkerkeR2(dif.U)$R2 - NagelkerkeR2(Baseline)$R2
 
 
-# compare model dif.NU against dif.U - Non-Uniform DIF effect size
+### compare model dif.NU against dif.U - Non-Uniform DIF effect size
 
 >> NagelkerkeR2(dif.NU)$R2 - NagelkerkeR2(dif.U)$R2
 
 <img width="452" height="87" alt="image" src="https://github.com/user-attachments/assets/b9dd0b5e-ecc8-4316-812d-641dded97956" />
 
 
-## Decision rule:
+### Decision rule:
 
 * Large DIF: Chi-square significant and Nagelkerke R2 change ≥ 0.07
 
@@ -869,4 +869,77 @@ Note. The first, baseline model, will include the total Nscore as the only predi
 : Nagelkerke R2 increment from Baseline model to dif.U model is 0.035. According to the DIF classification rules, this just qualifies for moderate DIF (because the effect was significant 
 
 Nagelkerke R2 increment from dif.U model to dif.NU model is 0.0007. According to the DIF classification rules, there is no DIF (i.e. DIF is negligible), because the effect was insignificant – see Q4, and the effect size is tiny.
+
+
+### Describing the effects: regression coefficients
+
+* Obtain the regression coefficients of the final model
+
+  >> summary(dif.NU)
+
+* coefficients in logistic regression are on the log-odds scale, and therefore, they are not interpreted. Instead, request exp(B) and interpret them as odds ratios.
+
+>> exp(coef(dif.NU))
+
+<img width="1304" height="592" alt="Screenshot 2026-05-17 at 6 45 35 pm" src="https://github.com/user-attachments/assets/3cc7ab1e-bb49-4a4e-ab25-a923f3db680d" />
+
+QUESTION 8. Finally, try to interpret any moderate or large DIF effects that you found (ignore negligible DIF). Who has a higher expected probability of endorsing item N_19 – males or females? 
+
+A: We found moderate Uniform DIF for item N_19. We also found that females have higher odds of endorsing the item given the same N-score as males (because males have lower odds – see Q7). It appears that females admit to their “feelings being easily hurt” (see text of N_19) more easily than males with the same Neuroticism level. This might be because expressing their feelings is more socially acceptable for females.
+
+
+# <Item response modelling of binary test items>
+
+>> N_data <- EPQ[ ,4:26]
+
+>> library(ltm)
+
+## Fit a 1-parameter logistic (1PL or Rasch) model
+
+>> fit1PL <- rasch(N_data)
+
+>> summary(fit1PL)
+
+### Parameters in convenient format
+
+>> coef(fit1PL)
+
+* You will see the difficulty and discrimination parameters. In 1-parameter and 2-parameter models, difficulty refers to the latent trait score where the probability of ‘YES’ response equals the probability of ‘NO’ response (both P=0.5). Discrimination refers to the steepness (slope) of the probability function (item characteristic curve) at the item difficulty.
+
+## EX QUESTION 1. Examine the 1PL difficulty parameters. Do the difficulty parameters vary widely? What is the ‘easiest’ item in this set? What is the most ‘difficult’ item? Examine the phrasing of the corresponding items (refer to the item list on Moodle) – can you see why one item is easier to agree with than the other?
+
+<img width="1334" height="374" alt="Screenshot 2026-05-17 at 6 51 37 pm" src="https://github.com/user-attachments/assets/62833420-5a9c-486a-aa4e-1228b90f04ff" />
+
+<img width="944" height="1226" alt="Screenshot 2026-05-17 at 6 51 45 pm" src="https://github.com/user-attachments/assets/ef28d70e-76ad-46ff-aab3-c8a4fc859865" />
+
+## EX QUESTION 2. Examine the 1PL discrimination parameters. Why is the discrimination parameter the same for the whole set of 23 items?
+
+A: Only one discrimination parameter is printed for this set because the 1PL (Rasch) model assumes that all items have equal discrimination. Therefore, the model constrains all discriminations to be equal.
+
+>> plot(fit2PL)
+
+<img width="452" height="265" alt="image" src="https://github.com/user-attachments/assets/572ffb9c-cbf9-4953-a4ee-138e9de1ff70" />
+
+
+## Fit a 2-parameter logistic model
+
+>> fit2PL <- ltm(N_data ~ z1)
+
+* It specifies that items in the set N_data are ‘regressed on’ one latent trait (z1). Note that z1 is not an arbitrary name; it is actually fixed in the package. At most, two latent traits can be fitted (z1 + z2). We are only fitting one trait, and therefore we specify ~ z1.
+
+>> summary(fit2PL)
+
+* parameters in a convenient format
+
+>> coef(fit2PL)
+
+
+<img width="1328" height="394" alt="Screenshot 2026-05-17 at 6 55 11 pm" src="https://github.com/user-attachments/assets/fd08316c-4ad0-4b6c-a5f4-de7c19de9beb" />
+
+<img width="1332" height="494" alt="Screenshot 2026-05-17 at 6 55 16 pm" src="https://github.com/user-attachments/assets/131ab19e-d999-43d4-a109-0676c806c6eb" />
+
+<img width="736" height="1232" alt="Screenshot 2026-05-17 at 6 55 22 pm" src="https://github.com/user-attachments/assets/71bec6e0-7263-4196-8012-af6e40793e5f" />
+
+
+
 
