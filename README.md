@@ -835,6 +835,38 @@ Note. The first, baseline model, will include the total Nscore as the only predi
 <img width="1284" height="610" alt="Screenshot 2026-05-16 at 2 34 40 pm" src="https://github.com/user-attachments/assets/4f04b770-5412-4a48-b96b-9283c63dd69f" />
 
 
-#Evaluating effect sizes for uniform and non-uniform effects of sex - use package "fmsb"
+# Evaluating effect sizes for uniform and non-uniform effects of sex - use package "fmsb"
 
+>> NagelkerkeR2(Baseline)
+
+>> NagelkerkeR2(dif.U)
+
+>> NagelkerkeR2(dif.NU)
+
+>> Baseline: Nagelkerke R2 = 0.4888; dif.U: Nagelkerke R2 = 0.5237; dif.NU: Nagelkerke R2 = 0.5244
+
+
+# compare model dif.U against Baseline - Uniform DIF effect size
+
+>> NagelkerkeR2(dif.U)$R2 - NagelkerkeR2(Baseline)$R2
+
+
+# compare model dif.NU against dif.U - Non-Uniform DIF effect size
+
+>> NagelkerkeR2(dif.NU)$R2 - NagelkerkeR2(dif.U)$R2
+
+<img width="452" height="87" alt="image" src="https://github.com/user-attachments/assets/b9dd0b5e-ecc8-4316-812d-641dded97956" />
+
+
+## Decision rule:
+
+* Large DIF: Chi-square significant and Nagelkerke R2 change ≥ 0.07
+
+* Moderate DIF: Chi-square significant and Nagelkerke R2 change between 0.035 and 0.07
+
+* Negligible DIF: Chi-square insignificant or Nagelkerke R2 change < 0.035
+
+: Nagelkerke R2 increment from Baseline model to dif.U model is 0.035. According to the DIF classification rules, this just qualifies for moderate DIF (because the effect was significant 
+
+Nagelkerke R2 increment from dif.U model to dif.NU model is 0.0007. According to the DIF classification rules, there is no DIF (i.e. DIF is negligible), because the effect was insignificant – see Q4, and the effect size is tiny.
 
