@@ -941,5 +941,29 @@ A: Only one discrimination parameter is printed for this set because the 1PL (Ra
 <img width="736" height="1232" alt="Screenshot 2026-05-17 at 6 55 22 pm" src="https://github.com/user-attachments/assets/71bec6e0-7263-4196-8012-af6e40793e5f" />
 
 
+## Compare 1PL and 2PL models
 
+>> anova(fit1PL, fit2PL)
+
+<img width="419" height="109" alt="image" src="https://github.com/user-attachments/assets/13636aed-ef37-4cdd-8208-a4b1b5147d18" />
+
+
+## EX QUESTION 6. Examine the results of anova() function. “LRT” value is the likelihood ratio test result (which is the chi-square). What are the degrees of freedom? Can you explain why the degrees of freedom as they are? Is the difference between the two models significant? Which model would you retain? (Use the same logic as we used in SEM for judging which model to retain).
+
+A: The degrees of freedom = 22. This is made up by the difference in the number of item parameters estimated. The Rasch model estimated 23 difficulty parameters and only 1 discrimination parameter (one for all items). The 2PL model estimated 23 difficulty parameters and 23 discrimination parameters. The difference between the two models = 22 parameters. The chi-square value 346.06 on 22 degrees of freedom is highly significant, so the 2PL model fits the data much better and we have to prefer it to the more parsimonious but worse-fitting 1PL model.
+
+## Estimate Neuroticism trait scores for people
+
+>> Scores <- factor.scores(fit2PL, method="EB", resp.patterns=N_data)
+
+* Check out what components are stored in this object by calling head(Scores). It appears that the estimated trait scores (z1) and their standard errors (se.z1) are stored in $score.dat part of the Scores object.
+
+>> Nscore <- Scores$score.dat$z1
+
+>> Nse <- Scores$score.dat$se.z1
+
+
+<img width="1338" height="466" alt="Screenshot 2026-05-17 at 7 05 08 pm" src="https://github.com/user-attachments/assets/be02bd81-f8d7-4427-a065-f06af0749e2d" />
+
+<img width="948" height="622" alt="Screenshot 2026-05-17 at 7 05 22 pm" src="https://github.com/user-attachments/assets/85782b77-add0-4c19-9d4a-ff2e5edf7aba" />
 
