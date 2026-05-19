@@ -967,3 +967,26 @@ A: The degrees of freedom = 22. This is made up by the difference in the number 
 
 <img width="948" height="622" alt="Screenshot 2026-05-17 at 7 05 22 pm" src="https://github.com/user-attachments/assets/85782b77-add0-4c19-9d4a-ff2e5edf7aba" />
 
+
+* plot the histogram of the estimated IRT scores, by calling:
+
+>> hist(Nscore)
+>> Nsum <- rowMeans(N_data, na.rm=TRUE)*23
+>>plot(Nscore, Nsum)
+
+<img width="452" height="258" alt="image" src="https://github.com/user-attachments/assets/df05222a-68bd-45ca-8a30-710f100e218e" />
+
+# Evaluate the Standard Errors of measurement
+
+* plot the IRT estimated scores against their standard errors:
+
+>> plot(Nscore, Nse)
+
+<img width="452" height="256" alt="image" src="https://github.com/user-attachments/assets/6dbd786d-dc70-4eed-80ec-ce5e7d4ecf78" />
+
+
+### QUESTION 7. Examine the graph. What range of the Neuroticism trait score is measured with most precision? What are the smallest and the largest Standard Errors on this graph, approximately?
+
+A: Most precise measurement is observed in the range between about z=-0.2 and z=0. The smallest standard error was about 0.3 (exact value 0.299). The largest standard error was about 0.57 (exact value 0.573).
+
+
